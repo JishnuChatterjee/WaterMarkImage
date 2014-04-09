@@ -3,12 +3,15 @@ package com.jishnu;
 
 
 import java.awt.BorderLayout;
+import java.awt.GridBagLayout;
+import java.awt.GridLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.FilenameFilter;
 
+import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
@@ -18,6 +21,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
+import javax.swing.SpringLayout;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.text.AbstractDocument;
@@ -57,11 +61,11 @@ public class WaterMarkerFileChooser extends JPanel
     	}
     
     public WaterMarkerFileChooser() {
-        super(new BorderLayout());
+       // super(new BoxLayout(,BoxLayout.Y_AXIS));
 
         //Create the log first, because the action listeners
         //need to refer to it.
-        log = new JTextArea(5,20);
+        log = new JTextArea(2,20);
         log.setMargin(new Insets(5,5,5,5));
         log.setLineWrap(true);
         log.setWrapStyleWord(true);
@@ -84,26 +88,36 @@ public class WaterMarkerFileChooser extends JPanel
 
         //Create the open button.  We use the image from the JLF
         //Graphics Repository (but we extracted it from the jar).
-        inputPath=new JTextField();
+        inputPath=new JTextField(20);
+        inputPath.setMargin(new Insets(5,5,5,5));
+        inputPath.setEditable(false);
         inputButton = new JButton("Input Dir");
         inputButton.addActionListener(this);
-
+        JPanel inputPanel = new JPanel(); //use FlowLayout
+        inputPanel.add(inputPath);
+        inputPanel.add(inputButton);
         //Create the save button.  We use the image from the JLF
         //Graphics Repository (but we extracted it from the jar).
+        outputPath=new JTextField(20);
+        outputPath.setMargin(new Insets(5,5,5,5));
+        outputPath.setEditable(false);
         outputButton = new JButton("Output Dir");
         outputButton.addActionListener(this);
+        JPanel outputPanel = new JPanel(); //use FlowLayout
+        outputPanel.add(outputPath);
+        outputPanel.add(outputButton);
         
+        JPanel startPanel = new JPanel(); //use FlowLayout
         startButton=new JButton("start");
         startButton.addActionListener(this);
-        //For layout purposes, put the buttons in a separate panel
-        JPanel buttonPanel = new JPanel(); //use FlowLayout
-        buttonPanel.add(inputButton);
-        buttonPanel.add(outputButton);
-        buttonPanel.add(startButton);
+        startPanel.add(startButton);
 
         //Add the buttons and the log to this panel.
-        add(buttonPanel, BorderLayout.PAGE_START);
-        add(logScrollPane, BorderLayout.CENTER);
+        setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+        add(inputPanel);
+        add(outputPanel);
+        add(logScrollPane);
+        add(startPanel);
     }
 
     public void actionPerformed(ActionEvent e) {
@@ -115,6 +129,7 @@ public class WaterMarkerFileChooser extends JPanel
             if (returnVal == JFileChooser.APPROVE_OPTION) {
             	if(outputFile==null || !fc.getSelectedFile().getPath().equals(outputFile.getPath())){
             		inputFile = fc.getSelectedFile();
+            		inputPath.setText(inputFile.getPath());
             	}
             	else{
             		JOptionPane.showMessageDialog(WaterMarkerFileChooser.this, "Input and Output folders must be different", "Message Error", JOptionPane.ERROR_MESSAGE);
@@ -127,6 +142,7 @@ public class WaterMarkerFileChooser extends JPanel
             if (returnVal == JFileChooser.APPROVE_OPTION) {
             	if(inputFile==null || !fc.getSelectedFile().getPath().equals(inputFile.getPath())){
             		outputFile = fc.getSelectedFile();
+            		outputPath.setText(outputFile.getPath());
             	}
             	else{
             		JOptionPane.showMessageDialog(WaterMarkerFileChooser.this, "Input and Output folders must be different", "Message Error", JOptionPane.ERROR_MESSAGE);
