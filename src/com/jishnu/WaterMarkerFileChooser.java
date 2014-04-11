@@ -49,7 +49,7 @@ public class WaterMarkerFileChooser extends JPanel
 
     	  public void insertString(int offs, String str, AttributeSet a) throws BadLocationException {
 
-    	    if(str != null && log.getText().length() < MAX_LENGTH && log.getText().trim() !="") 
+    	    if(str != null && log.getText().length() < MAX_LENGTH ) 
     	    {
     	      super.insertString(offs, str, a);
     	    }
@@ -151,7 +151,7 @@ public class WaterMarkerFileChooser extends JPanel
             }
         }
         else if (e.getSource()==startButton){
-        	if(inputFile!=null && outputFile!=null && log.getText().length()>0){
+        	if(inputFile!=null && outputFile!=null && log.getText().length()>0 && log.getText().trim().length() >0){
         		File[] inFilesArray = inputFile.listFiles(new FilenameFilter() {
 
         			public boolean accept(File dir, String name) {
